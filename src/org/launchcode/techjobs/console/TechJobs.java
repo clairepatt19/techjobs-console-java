@@ -2,6 +2,7 @@ package org.launchcode.techjobs.console;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -11,7 +12,7 @@ public class TechJobs {
 
     private static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -49,6 +50,7 @@ public class TechJobs {
                     for (String item : results) {
                         System.out.println(item);
                     }
+
                 }
 
             } else { // choice is "search"
@@ -64,10 +66,28 @@ public class TechJobs {
                     System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
+                }if(!(searchField.equals("all"))){
+                        ArrayList<HashMap<String, String>> dataFound = new ArrayList<>();
+                        dataFound=JobData.findByColumnAndValue(searchField, searchTerm);
+                    if(dataFound.isEmpty()) {
+                        System.out.println("No Jobs Found!");
+                    }
+
+//                    ArrayList<HashMap<String, String>> dataFound = new ArrayList<>();
+//                    dataFound=JobData.findByColumnAndValue(searchField, searchTerm);
+//                       for (HashMap<String, String> row : dataFound) {
+//                          String aValue = row.get(searchField);
+//                          if (aValue.contains(searchTerm)) {
+//                              dataFound.add(row);
+//                          }
+//                          else{
+
+                        }
+                    }
                 }
             }
         }
-    }
+
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
@@ -103,14 +123,23 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+        //--5/04/2021 Claire Patterson--implemented printJobs method by adding
+        // the following code to iterate through an Arraylist<HashMap<String,String>>
+        //that holds job data from the Jobs_data.csv file and print that data.
+        for (HashMap<String, String> map : someJobs) {
+            System.out.println("*****");
 
-        System.out.println("printJobs is not implemented yet");
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        }
     }
 }

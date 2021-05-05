@@ -123,6 +123,7 @@ public class JobData {
             System.out.println("Failed to load job data");
             e.printStackTrace();
         }
+
     }
 
 }
