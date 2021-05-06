@@ -1,9 +1,7 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import javax.sound.midi.Soundbank;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -50,7 +48,6 @@ public class TechJobs {
                     for (String item : results) {
                         System.out.println(item);
                     }
-
                 }
 
             } else { // choice is "search"
@@ -66,61 +63,41 @@ public class TechJobs {
                     System.out.println("Search all fields not yet implemented.");
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
-                }if(!(searchField.equals("all"))){
-                        ArrayList<HashMap<String, String>> dataFound = new ArrayList<>();
-                        dataFound=JobData.findByColumnAndValue(searchField, searchTerm);
-                    if(dataFound.isEmpty()) {
-                        System.out.println("No Jobs Found!");
-                    }
-
-//                    ArrayList<HashMap<String, String>> dataFound = new ArrayList<>();
-//                    dataFound=JobData.findByColumnAndValue(searchField, searchTerm);
-//                       for (HashMap<String, String> row : dataFound) {
-//                          String aValue = row.get(searchField);
-//                          if (aValue.contains(searchTerm)) {
-//                              dataFound.add(row);
-//                          }
-//                          else{
-
-                        }
-                    }
+                } if((JobData.findByColumnAndValue(searchField, searchTerm)).isEmpty()){
+                    System.out.println("No Jobs Found!");
                 }
             }
         }
-
+    }
 
     // ﻿Returns the key of the selected item from the choices Dictionary
     private static String getUserSelection(String menuHeader, HashMap<String, String> choices) {
-
-        Integer choiceIdx;
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
-
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
         Integer i = 0;
-        for (String choiceKey : choices.keySet()) {
+        for(Iterator var6 = choices.keySet().iterator(); var6.hasNext(); i = i + 1) {
+            String choiceKey = (String)var6.next();
             choiceKeys[i] = choiceKey;
-            i++;
         }
 
+        Integer choiceIdx;
         do {
-
             System.out.println("\n" + menuHeader);
-
             // Print available choices
-            for (Integer j = 0; j < choiceKeys.length; j++) {
-                System.out.println("" + j + " - " + choices.get(choiceKeys[j]));
+            for (Integer j = 0; j < choiceKeys.length; j=j+1) {
+                System.out.println(j + " - " + (String)choices.get(choiceKeys[j]));
             }
 
             choiceIdx = in.nextInt();
             in.nextLine();
 
             // Validate user's input
-            if (choiceIdx < 0 || choiceIdx >= choiceKeys.length) {
-                System.out.println("Invalid choice. Try again.");
-            } else {
+            if (choiceIdx >= 0 && choiceIdx < choiceKeys.length) {
                 validChoice = true;
+            }else{
+                System.out.println("Invalid choice. Try again.");
             }
 
         } while (!validChoice);
