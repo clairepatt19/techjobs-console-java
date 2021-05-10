@@ -7,12 +7,14 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
- * Created by LaunchCode
+ * Originally Created by LaunchCode
+ * Added a new method(findByValue)for search All option
+ * and additions to make existing methods(printJobs,findByColumnAndValue)functional
+ * implemented 5/2021 by Claire Patterson
+ * Jan LC101 cohort
  */
 public class JobData {
 
@@ -21,6 +23,43 @@ public class JobData {
 
     private static ArrayList<HashMap<String, String>> allJobs;
 
+     /**
+     * Returns results of search the jobs data by key/value, using
+     * inclusion of the search term.
+     *
+     * For example, searching for employer "Enterprise" will include results
+     * with "Enterprise Holdings, Inc".
+     *
+     *
+     * @param value--searchTerm Value of the field to search for
+     * @return List of all jobs matching the criteria
+     */
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        // load data, if not already loaded
+        loadData();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+
+            for (Map.Entry<String, String> entry : row.entrySet()) {
+                String aValue = entry.getValue();
+                aValue = aValue.toLowerCase().replaceAll(" ","");
+                value = value.toLowerCase().replaceAll(" ","");
+                Boolean checkCase = aValue.contains(value);
+                if (checkCase) {
+                    jobs.add(row);
+                    break;
+                }
+            }
+        }
+
+        return jobs;
+    }
+
+
+
     /**
      * Fetch list of all values from loaded data,
      * without duplicates, for a given column.
@@ -28,23 +67,7 @@ public class JobData {
      * @param field The column to retrieve values from
      * @return List of all of the values of the given field
      */
-//    public static ArrayList<HashMap<String,String>> findByValue (String field) {
-//
-//        // load data, if not already loaded
-//        loadData();
-//
-//        ArrayList<String> values = new ArrayList<>();
-//
-//        for (HashMap<String, String> row : allJobs) {
-//            String aValue = row.get(field);
-//
-//            if (!values.contains(aValue)) {
-//                values.add(aValue);
-//            }
-//        }
-//
-//        return values;
-//    }
+
 
     public static ArrayList<String> findAll(String field) {
 
@@ -80,9 +103,10 @@ public class JobData {
      * with "Enterprise Holdings, Inc".
      *
      * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param value Value of the field to search for
      * @return List of all jobs matching the criteria
      */
+
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
 
         // load data, if not already loaded
@@ -93,14 +117,19 @@ public class JobData {
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
-
-            if (aValue.contains(value)) {
+            aValue = aValue.toLowerCase().replaceAll(" ","");
+            value = value.toLowerCase().replaceAll(" ","");
+            Boolean caseCheck=aValue.contains(value);
+            if (caseCheck) {
                 jobs.add(row);
+                break;
             }
-        }
 
+        }
         return jobs;
     }
+
+
 
     /**
      * Read in data from a CSV file and store it in a list

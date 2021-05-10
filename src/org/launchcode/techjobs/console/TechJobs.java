@@ -60,11 +60,9 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
-                } if((JobData.findByColumnAndValue(searchField, searchTerm)).isEmpty()){
-                    System.out.println("No Jobs Found!");
                 }
             }
         }
@@ -77,8 +75,8 @@ public class TechJobs {
         // Put the choices in an ordered structure so we can
         // associate an integer with each one
         Integer i = 0;
-        for(Iterator var6 = choices.keySet().iterator(); var6.hasNext(); i = i + 1) {
-            String choiceKey = (String)var6.next();
+        for (Iterator var6 = choices.keySet().iterator(); var6.hasNext(); i = i + 1) {
+            String choiceKey = (String) var6.next();
             choiceKeys[i] = choiceKey;
         }
 
@@ -86,8 +84,8 @@ public class TechJobs {
         do {
             System.out.println("\n" + menuHeader);
             // Print available choices
-            for (Integer j = 0; j < choiceKeys.length; j=j+1) {
-                System.out.println(j + " - " + (String)choices.get(choiceKeys[j]));
+            for (Integer j = 0; j < choiceKeys.length; j = j + 1) {
+                System.out.println(j + " - " + (String) choices.get(choiceKeys[j]));
             }
 
             choiceIdx = in.nextInt();
@@ -96,7 +94,7 @@ public class TechJobs {
             // Validate user's input
             if (choiceIdx >= 0 && choiceIdx < choiceKeys.length) {
                 validChoice = true;
-            }else{
+            } else {
                 System.out.println("Invalid choice. Try again.");
             }
 
@@ -110,12 +108,14 @@ public class TechJobs {
         //--5/04/2021 Claire Patterson--implemented printJobs method by adding
         // the following code to iterate through an Arraylist<HashMap<String,String>>
         //that holds job data from the Jobs_data.csv file and print that data.
-        for (HashMap<String, String> map : someJobs) {
+        if (someJobs.isEmpty()) {
+            System.out.println("No jobs available for that search!");
+        }else{
+            for (HashMap<String, String> map : someJobs) {
             System.out.println("*****");
-
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+                for (Map.Entry<String, String> entry : map.entrySet()) {
+                    System.out.println(entry.getKey() + ": " + entry.getValue());
+                }
             }
         }
     }
